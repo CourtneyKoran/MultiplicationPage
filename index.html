@@ -1,0 +1,208 @@
+<!--
+File: index.html
+GUI Assignment: HW3. Creating a dynamic multiplication table based on user input using javascript.
+Courtney Koran, UMass Lowell Computer Science, Courtney_Koran@student.uml.edu
+Copyright (c) 2021 by Courtney. All rights reserved. May be freely copied or
+excerpted for educational purposes with credit to the author.
+updated by CK on July 31, 2021.
+This html and javascript code creates a dynamic multiplication table using user iput from a html form .
+-->
+
+<!-- using html 5-->
+<!DOCTYPE html>
+
+  <!--language is english-->
+  <html lang="en">
+
+    <!-- beginning of document header-->
+    <head>
+
+        <!-- linking css styling -->
+        <link rel="stylesheet" href="style.css">
+        
+        <!--beginning of javascript code included in head of html file-->
+        <script>
+            //creating a table and table wrapper
+            var div=document.createElement('div');
+            var table = document.createElement('table');
+            
+            //function that gets called when submit button is pressed
+            function myFunction() {
+              //first section of code get input from the form text boxes and places in an array
+              const tableVals=[];
+              var x = document.getElementById("frm1");
+              var i;
+              for (i = 0; i < x.length ;i++) {
+                tableVals[i]=x.elements[i].value;
+              }
+              
+              //create variables containing input that was placed in array
+              var v=tableVals[0]; //min col
+              var w=tableVals[1]; //max col
+              var y=tableVals[2]; //min row
+              var z=tableVals[3]; //max row
+            
+            //call function to see if user input is valid. If input not valid don't create table
+            if(isValid(v,w,y,z)){
+            
+            //check to see if there is a table that needs to be deleted and delete it row by row.
+            if(table.rows.length-1>0){
+                 
+                 for(var i = table.rows.length-1;i >= 0;i--){
+                    table.deleteRow(i);
+                 }
+               
+                }
+
+                //creating table head, and first th element of table
+                var header1 = table.createTHead();
+                
+                var tr = document.createElement('tr'); 
+            
+                var th1 = document.createElement('th');
+            
+                var text1 = document.createTextNode('');
+            
+                th1.appendChild(text1);
+               
+                tr.appendChild(th1);
+            
+                table.appendChild(tr);
+
+            //creating the row header 
+            for (var j = +v; j <= +w; j++){
+                
+                var th2 = document.createElement('th');
+                var text2 = document.createTextNode(j);
+                th2.appendChild(text2);
+                tr.appendChild(th2);
+            
+            }
+            
+            header1.appendChild(tr); //appending end of thead to last row header cell
+            
+            //outer loop creates first column header. inner loop fills in table body.
+            for (var i = +y; i <= +z; i++){
+                var header2 = table.createTHead();
+                var tr = document.createElement('tr'); 
+                var th1 = document.createElement('th');
+                var text1 = document.createTextNode(i);
+            
+                th1.appendChild(text1);
+              
+                tr.appendChild(th1);
+                
+                table.appendChild(tr);
+            
+                for (var j = +v; j <= +w; j++){
+                var td2 = document.createElement('td');
+                var text2 = document.createTextNode(j*i);
+                td2.appendChild(text2);
+                tr.appendChild(td2);
+            }
+            }
+            
+            document.body.appendChild(table);
+            div.appendChild(table);
+            document.body.appendChild(div);
+            
+            }
+            }
+            
+            //function to check if input is valid
+            function isValid(v, w, y, z){
+            let text;
+            var validInput=1; //flag to check when input is invalid
+            
+            /*cases to check if min col, max col, min row, and max values are valid.
+             2 different messages may be returned or no message if input is valid.
+             when any input value is not valid, validInput flag gets set to 0.*/
+            if(isNaN(+v) || +v < -50 || +v > 50){
+                text = "Invalid input. Please enter a valid numerical minimum column value between -50 and 50.";
+                document.getElementById("demo1").innerHTML = text;
+                validInput=0;
+            }
+            else if( +v > +w ){
+                text = "Invalid input. Minimum column value must be less than maximum column value.";
+                document.getElementById("demo1").innerHTML = text;
+                validInput=0;
+            }
+            else{
+                text = "";
+                document.getElementById("demo1").innerHTML = text;
+                
+            }
+            if( isNaN(+w) || +w < -50 || +w > 50){
+                text = "Invalid input. Please enter a valid numerical maximum column value between -50 and 50.";
+                document.getElementById("demo2").innerHTML = text;
+                validInput=0;
+            }
+            else if( +v > +w ){
+                text = "Invalid input. Maximum column value must be greater than minimum column value.";
+                document.getElementById("demo2").innerHTML = text;
+                validInput=0;
+            }
+            else{
+                text = "";
+                document.getElementById("demo2").innerHTML = text;
+                
+            }
+            if( isNaN(+y) || +y < -50 || +y > 50){
+                text = "Invalid input. Please enter a valid numerical minimum row value between -50 and 50.";
+                document.getElementById("demo3").innerHTML = text;
+                validInput=0;
+            }
+            else if(+y > +z ){
+                text = "Invalid input. Minimum row value must be less than maximum row value.";
+                document.getElementById("demo3").innerHTML = text;
+                validInput=0;
+            }
+            else{
+                text = "";
+                document.getElementById("demo3").innerHTML = text;
+                
+            }
+            if( isNaN(+z)  || +z < -50 || +z > 50){
+                text = "Invalid input. Please enter a valid numerical maximum row value between -50 and 50.";
+                document.getElementById("demo4").innerHTML = text;
+                validInput=0;
+            }
+            else if( +y > +z){
+                text = "Invalid input. Maximum row value must be greater than minimum row value.";
+                document.getElementById("demo4").innerHTML = text;
+                validInput=0;
+            }
+            else{
+                text = "";
+                document.getElementById("demo4").innerHTML = text;
+                
+            }
+            return validInput; //return 1 if all input is valid and 0 otherwise.
+            }
+            </script>
+    </head>
+
+<!-- start of webpage body -->
+<body>
+
+<!-- webpage header -->
+<h1>Multiplication Table Generator</h1>
+
+<!--container for form anf form containg input boxes for multiplicaton table ranges-->
+<div id=divform>
+  <p>Please enter the ranges between -50 and 50 for the multiplcation table</p>
+<form id="frm1" action="/action_page.php">
+  Minimum Column Value: <input type="text" name="mincol" value="">
+  <p id="demo1"></p>
+  Maximum Column Value: <input type="text" name="maxcol" value="">
+  <p id="demo2"></p>
+  Minimum Row Value: <input type="text" name="minrow" value="">
+  <p id="demo3"></p>
+  Maximum Row Value: <input type="text" name="maxrow" value="">
+  <p id="demo4"></p>
+  <input type="button" onclick="myFunction()" value="Submit"><br><br> 
+</form> 
+</div>
+</body>
+</html>
+
